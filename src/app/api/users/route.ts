@@ -1,19 +1,79 @@
-import {NextRequest,NextResponse}  from "next/server"
-import {Connect} from "@/db/dbConfig"
-import { UserSignUpApiRequestBody } from "@/helpers/types"
+import { NextRequest, NextResponse } from "next/server"
+import { Connect } from "@/db/dbConfig"
 import { Users } from "@/models/user"
+import {
+  validateEmail,
+  validateMobileNumber,
+  validatePassword,
+} from "@/helpers/validators"
+import { sendEmail } from "@/utils/mail"
 
 Connect()
 
-export function POST(request:UserSignUpApiRequestBody,response:NextResponse){
-    try{
-        const {firstName,lastName,email,password} = request.body
-        if(!firstName || !lastName || !email || !password){
-            return NextResponse.json({message:"Please provide all the requried data",status:404})
-        }
-        
-    }catch(error:any){
-        console.log(error)
-
+export async function POST(
+  request: NextRequest,
+  response: NextResponse
+) {
+  try {
+    const { firstName, lastName, email, password, mobile } = await request.json()
+    console.log("validateEmail(email)",validateEmail(email!));
+    console.log(password)
+    if (!validateEmail(email)) {
+      return NextResponse.json({
+        message: "Please provide valid email address",
+        status: 404,
+      })
     }
+    if (!validatePassword(password)) {
+      return NextResponse.json({
+        message: "Invalid Password.",
+        constraints: [
+          " Password must match with minimum 6 characters long and maximum 25 characters length",
+          "Password must contains atleast one numerice character",
+          "Password must contains atleast one numeric character",
+        ],
+        status: 404,
+      })
+    }
+    if (!validateMobileNumber(mobile)) {
+      return NextResponse.json({
+        message: "Please provide valid mobile number",
+        status: 404,
+      })
+    }
+    const existedUser = await Users.findOne({ $or: [{ email }, { mobile }] })
+    if (existedUser) {
+      return NextResponse.json({
+        message: "User with email addrss and mobile number is already exists",
+        status: 409,
+      })
+    }
+    const user: any = await Users.create({
+      firstName,
+      lastName,
+      email,
+      password,  
+      mobile,
+    })
+    const { userToken, hashedToken, tokenExpiry } = user?.generateTempTokens()
+    user.emailVerificationToken = hashedToken
+    user.emailVerificationExpiry = tokenExpiry
+
+    await user.save({ validateBeforeSave: false })
+    await sendEmail(
+      email,
+      "Please verify your email address",
+      `<h1>Verify your email</h1> <p>Click <a href=${process.env.DOMAIN}/verify-email?token=${userToken}>here</a> to verofy your email</p>`
+    )
+    return NextResponse.json({
+      message: "User created successfully",
+      status: 201,
+    })
+  } catch (error: any) {
+    console.log(error)
+    return NextResponse.json({
+      message: "Something went wrong",
+      status: 500,
+    })
+  }
 }

@@ -2,6 +2,7 @@ import { AvailableRoles, UserRoleEnum } from "@/constants"
 import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { randomBytes, createHash } from "crypto"
 const userSchema = new mongoose.Schema(
   {
     role: {
@@ -33,9 +34,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
     },
-    mobile:{
+    mobile: {
       type: String,
-      required:[true,"Mobile number is required"],
+      required: [true, "Mobile number is required"],
     },
     loginType: {
       type: String,
@@ -46,14 +47,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    jwtToken: {
-      type: String,
-      required: true,
-    },
     refreshToken: {
       type: String,
     },
-    emailVerifiedToken: {
+    emailVerificationToken: {
       type: String,
     },
     emailVerificationExpiry: {
@@ -89,16 +86,14 @@ userSchema.methods.generateJWTToken = function () {
   )
 }
 
-userSchema.methods.generateRefreshToken = function () {
-  return jwt.sign(
-    {
-      _id: this._id!,
-    },
-    process.env.REFRESH_TOKEN_SECRET!,
-    {
-      expiresIn: process.env.REFRESH_TOKEN_EXP,
-    }
-  )
+userSchema.methods.generateTempTokens = function () {
+  const userToken = randomBytes(25).toString()
+
+  const hashedToken = createHash("sha256").update(userToken).digest("hex")
+
+  const tokenExpiry = Date.now() + 60 * 60 * 1000 // 60 minutes
+
+  return { userToken, hashedToken, tokenExpiry }
 }
 
-export const Users = mongoose.model("Users",userSchema)
+export const Users = mongoose.model("Users", userSchema)
