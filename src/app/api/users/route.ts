@@ -10,7 +10,7 @@ import { sendEmail } from "@/utils/mail"
 
 Connect()
 
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest) {
   try {
     const { firstName, lastName, email, password, mobile } =
       await request.json()
