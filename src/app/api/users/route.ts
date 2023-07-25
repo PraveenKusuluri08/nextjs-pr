@@ -10,13 +10,11 @@ import { sendEmail } from "@/utils/mail"
 
 Connect()
 
-export async function POST(
-  request: NextRequest,
-  response: NextResponse
-) {
+export async function POST(request: NextRequest, response: NextResponse) {
   try {
-    const { firstName, lastName, email, password, mobile } = await request.json()
-    console.log("validateEmail(email)",validateEmail(email!));
+    const { firstName, lastName, email, password, mobile } =
+      await request.json()
+    console.log("validateEmail(email)", validateEmail(email!))
     console.log(password)
     if (!validateEmail(email)) {
       return NextResponse.json({
@@ -52,10 +50,11 @@ export async function POST(
       firstName,
       lastName,
       email,
-      password,  
+      password,
       mobile,
     })
     const { userToken, hashedToken, tokenExpiry } = user?.generateTempTokens()
+    console.log(hashedToken, userToken)
     user.emailVerificationToken = hashedToken
     user.emailVerificationExpiry = tokenExpiry
 
@@ -63,7 +62,7 @@ export async function POST(
     await sendEmail(
       email,
       "Please verify your email address",
-      `<h1>Verify your email</h1> <p>Click <a href=${process.env.DOMAIN}/verify-email?token=${userToken}>here</a> to verofy your email</p>`
+      `<h1>Verify your email</h1> <p>Click <a href=${process.env.DOMAIN}/verify-email?token=${userToken}>here</a> to verify your email</p>`
     )
     return NextResponse.json({
       message: "User created successfully",

@@ -86,8 +86,18 @@ userSchema.methods.generateJWTToken = function () {
   )
 }
 
+userSchema.methods.generateRefreshToken = function () {
+  return jwt.sign(
+    {
+      _id: this._id!,
+    },
+    process.env.REFRESH_TOKEN_SECRET!,
+    { expiresIn: process.env.REFRESH_TOKEN_EXP }
+  )
+}
+
 userSchema.methods.generateTempTokens = function () {
-  const userToken = randomBytes(25).toString()
+  const userToken = randomBytes(25).toString("hex")
 
   const hashedToken = createHash("sha256").update(userToken).digest("hex")
 
@@ -96,4 +106,5 @@ userSchema.methods.generateTempTokens = function () {
   return { userToken, hashedToken, tokenExpiry }
 }
 
-export const Users = mongoose.model("Users", userSchema)
+export const Users =
+  mongoose.models.Users ?? mongoose.model("Users", userSchema)
