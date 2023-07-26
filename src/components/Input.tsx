@@ -1,9 +1,10 @@
-import { LabelClassName, InputFieldStyleClassName } from "@/constants"
+import { LabelClassName, InputFieldStyleClassName } from "@/constants/constants"
 import { InputProps } from "@/utils/props"
 import React from "react"
 
 export const Input = ({
   id,
+  autoFocus,
   isRequired,
   labelFor,
   name,
@@ -20,6 +21,7 @@ export const Input = ({
         {labelText}
       </label>
       <input
+      autoFocus
         type={type}
         className={customClass?.length ? customClass : InputFieldStyleClassName}
         value={value}

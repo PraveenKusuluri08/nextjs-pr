@@ -1,11 +1,12 @@
-
-import Image from 'next/image'
-import { Component } from 'react'
+import Image from "next/image"
+import { Component } from "react"
 
 export default function Home() {
   return (
-  <div>
-    
-  </div>
+    <div className="dark:text-white w-10">
+      <nav>
+        Hey!
+      </nav>
+    </div>
   )
 }

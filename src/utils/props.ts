@@ -9,4 +9,5 @@ export type InputProps ={
     customClass?:string,
     handleChange:React.ChangeEventHandler<HTMLInputElement>
     value:string
+    autoFocus?:boolean
 }

@@ -2,13 +2,22 @@
 
 import React, { FC, useState } from "react"
 import { motion } from "framer-motion"
-import { SignUpType } from "./types"
 import Input from "@/components/Input"
 import PhoneInput from "react-phone-input-2"
 import "react-phone-input-2/lib/style.css"
 import axios from "axios"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
+
+
+type SignUpType = {
+  firstName:string,
+  lastName:string,
+  email: string,
+  password: string,
+  mobile:string
+}
+
 
 const SignUp: FC = () => {
   const router = useRouter()
@@ -67,6 +76,13 @@ const SignUp: FC = () => {
       }
       if (response.data.status === 201) {
         toast.success(response.data.message)
+        setUser({
+          email: "",
+          firstName: "",
+          lastName: "",
+          mobile: "",
+          password: "",
+        })
         router.push("/signin")
       }
     } catch (error: any) {
@@ -97,6 +113,7 @@ const SignUp: FC = () => {
           >
             <div className="w-full md:w-1/2 px-3 md:mb-0">
               <Input
+                autoFocus={true}
                 labelText={"FirstName"}
                 name={"firstName"}
                 id={"firstName"}
@@ -124,7 +141,7 @@ const SignUp: FC = () => {
               />
             </div>
 
-            <div className="flex flex-wrap w-full mb-3">
+            <div className="flex flex-wrap w-full mb-2">
               <div className="w-full px-3">
                 <Input
                   labelText={"Email"}
@@ -137,6 +154,37 @@ const SignUp: FC = () => {
                   placeholderText={"Email"}
                   handleChange={handleChange}
                   value={user.email}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-wrap w-full mb-4">
+              <div className="w-full focus:outline-gray-400 focus:bg-white mt-3 px-3 relative container mx-auto text-gray-800">
+                <label
+                  htmlFor="mobile"
+                  className="dark:bg-white block uppercase tracking-wide text-gray-800 text-sm font-bold mb-3 "
+                >
+                  Mobile Number
+                </label>
+
+                <PhoneInput
+                  value={user.mobile}
+                  onChange={(phone) =>
+                    setUser({ ...user, mobile: "+" + phone })
+                  }
+                  inputStyle={{
+                    width: "100%",
+                    letterSpacing: "0.025em",
+                    paddingTop: "24px",
+                    paddingBottom: "24px",
+                  }}
+                  inputProps={{
+                    name: "mobile",
+                    required: true,
+                  }}
+                  containerStyle={{ fontWeight: "700" }}
+                  placeholder="Mobile Number"
+                  country="in"
                 />
               </div>
             </div>
@@ -204,51 +252,29 @@ const SignUp: FC = () => {
                   )}
                 </button>
               </div>
-              </div>
-              <div className="flex flex-wrap w-full mb-2">
-                <div className="w-full focus:outline-gray-400 focus:bg-white mt-3 px-3 relative container mx-auto text-gray-800">
-                  <label
-                    htmlFor="mobile"
-                    className="dark:bg-white block uppercase tracking-wide text-gray-800 text-sm font-bold mb-3 "
-                  >
-                    Mobile Number
-                  </label>
+            </div>
 
-                  <PhoneInput
-                    value={user.mobile}
-                    onChange={(phone) =>
-                      setUser({ ...user, mobile: "+" + phone })
-                    }
-                    inputStyle={{
-                      width: "100%",
-                      letterSpacing: "0.025em",
-                      paddingTop: "24px",
-                      paddingBottom: "24px",
-                    }}
-                    inputProps={{
-                      name: "mobile",
-                      required: true,
-                      autoFocus: true,
-                    }}
-                    containerStyle={{ fontWeight: "700" }}
-                    placeholder="Mobile Number"
-                    country="in"
-                  />
-                </div>
-              </div>
-              
-              <div className="container flex flex-col mr-5 py-2">
-                <button
-                  onClick={(e: any) => onSignUp(e)}
-                  className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
-                >
-                  Sign up
-                </button>
-              </div>
-            
+            <div className="container flex flex-col mr-5 py-2">
+              <button
+                onClick={(e: any) => onSignUp(e)}
+                className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+              >
+                Sign up
+              </button>
+            </div>
+
             <div className="container flex flex-col mr-5 py-2 justify-center items-center">
-              <h1 className="pb-3 text-gray-800 tracking-tight leading-none font-extrabold"><span className="underline underline-offset-3 decoration-4 decoration-blue-500 mr-2">Having account</span> <mark className="px-5 text-white bg-blue-600 rounded dark:bg-blue-500 cursor-pointer"onClick={()=>router.push("/signin")}>Login</mark></h1>
-              
+              <h1 className="pb-3 text-gray-800 tracking-tight leading-none font-extrabold">
+                <span className="underline underline-offset-3 decoration-4 decoration-blue-500 mr-2">
+                  Having account
+                </span>{" "}
+                <mark
+                  className="px-5 text-white bg-blue-600 rounded dark:bg-blue-500 cursor-pointer"
+                  onClick={() => router.push("/signin")}
+                >
+                  Login
+                </mark>
+              </h1>
             </div>
           </form>
         </div>
