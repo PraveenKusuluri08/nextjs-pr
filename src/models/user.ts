@@ -1,4 +1,4 @@
-import { AvailableRoles, UserRoleEnum } from "@/constants"
+import { AvailableRoles, UserRoleEnum } from "@/constants/constants"
 import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
