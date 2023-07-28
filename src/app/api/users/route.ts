@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
     await sendEmail(
       email,
       "Please verify your email address",
-      `<h1>Verify your email</h1> <p>Click <a href=${process.env.DOMAIN}/verify-email?token=${userToken}>here</a> to verify your email</p>`
+      `<h1>Verify your email</h1> <p>Click <a href=${process.env.DOMAIN}/verifyemail?token=${userToken}>here</a> to verify your email</p>`
     )
     return NextResponse.json({
       message: "User created successfully",
