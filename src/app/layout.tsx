@@ -2,7 +2,6 @@ import SideBar from "@/components/AuthNavbar"
 import "./globals.css"
 import { Inter } from "next/font/google"
 import { Toaster } from "react-hot-toast"
-import { LayoutProvider } from "@/components/LayoutProvider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -21,7 +20,7 @@ export default function RootLayout({
       <body  className={inter.className}>
 
           {children}
-        
+        <Toaster/>
       </body>
     </html>
   )
