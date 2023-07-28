@@ -105,7 +105,7 @@ userSchema.methods.generateTempTokens = function () {
 
   const hashedToken = createHash("sha256").update(userToken).digest("hex")
 
-  const tokenExpiry = Date.now() + 60 * 60 * 1000 // 60 minutes
+  const tokenExpiry = Date.now() + 20 * 20 * 1000
 
   return { userToken, hashedToken, tokenExpiry }
 }
