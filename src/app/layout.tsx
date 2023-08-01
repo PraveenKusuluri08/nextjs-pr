@@ -20,7 +20,8 @@ export default function RootLayout({
       <body  className={inter.className} suppressHydrationWarning={true}>
 
           {children}
-        <Toaster/>
+          
+        <Toaster position="bottom-center"/>
       </body>
     </html>
   )

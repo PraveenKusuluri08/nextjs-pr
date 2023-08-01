@@ -1,4 +1,3 @@
-import VerifyEmail from "@/app/verifyemail/page"
 import { Connect } from "@/db/dbConfig"
 import { validateEmail } from "@/helpers/validators"
 import { Users } from "@/models/user"

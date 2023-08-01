@@ -5,8 +5,8 @@ export function middleware(request: NextRequest) {
   const isPublicPath =
     path === "/signin" ||
     path === "/signup" ||
-    path === "/forgot-password" ||
-    path === "/verify-email"
+    path === "/forgot-password" 
+    // path === "/verifyemail"
 
   const token = request.cookies.get("token")?.value
 
