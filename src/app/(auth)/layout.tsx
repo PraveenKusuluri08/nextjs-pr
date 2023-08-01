@@ -16,14 +16,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>
-        <div className={inter.className}>
-          <AuthNavbar/>
-          {children}
-        </div>
-        <Toaster position="bottom-center" />
-      </body>
-    </html>
+    <section>
+      <div className={inter.className}>
+        {children}
+        <AuthNavbar />
+      </div>
+      <Toaster position="bottom-center" />
+    </section>
   )
 }
