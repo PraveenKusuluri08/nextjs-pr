@@ -1,7 +1,7 @@
 "use client"
 import { usePathname } from "next/navigation"
 import React, { ReactNode } from "react"
-import SideBar from "./AuthNavbar"
+import Sidebar from "./SideBar"
 export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -15,7 +15,7 @@ export const LayoutProvider: React.FC<{ children: ReactNode }> = ({
       : true
   return (
     <React.Fragment>
-      {showSidebar && <SideBar />}
+      {showSidebar && <Sidebar />}
       {children}
     </React.Fragment>
   )
