@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     await sendEmail(
       email,
       "Requested to reset password",
-      `<h1>To reset the password</h1> <p>Click <a href=${process.env.DOMAIN}/reset-password?token=${userToken}>here </a>To reset the password</p>`
+      `<h1>To reset the password</h1> <p>Click <a href=${process.env.DOMAIN}/reset-password?token=${userToken}>here</a>To reset the password</p>`
     )
     return NextResponse.json({
       message: `Reset Password link is send to ${email} please check`,

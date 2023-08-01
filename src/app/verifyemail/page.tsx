@@ -1,4 +1,5 @@
 "use client"
+
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import { useRouter } from "next/navigation"
@@ -41,7 +42,7 @@ const VerifyEmail = () => {
       <h1 className="text-2xl leading-tight font-extrabold dark:text-white">
         Verify Email
       </h1>
-      <p className="py-3 leading-tight">To access the <span>Account please verify email address</span></p>
+      <p className="py-3 leading-tight">To access the Account please verify email address</p>
       <button className="mt-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded" onClick={(e:any)=>verifyEmail(e)}>
         Verify Email
       </button>
