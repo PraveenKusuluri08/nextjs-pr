@@ -4,7 +4,7 @@ import { Component } from "react"
 export default function Home() {
   return (
     <div className="dark:text-white w-10">
-      
+      Hello
     </div>
   )
 }

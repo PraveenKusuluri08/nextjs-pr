@@ -43,6 +43,9 @@ const userSchema = new mongoose.Schema(
       enum: ["GOOGLE", "EMAIL_PASSWORD"],
       default: "EMAIL_PASSWORD",
     },
+    verificationId:{
+      type:String
+    },
     isEmailVerified: {
       type: Boolean,
       default: false,
@@ -105,7 +108,7 @@ userSchema.methods.generateTempTokens = function () {
 
   const hashedToken = createHash("sha256").update(userToken).digest("hex")
 
-  const tokenExpiry = Date.now() + 20 * 20 * 1000
+  const tokenExpiry = Date.now() + 60 * 60 * 1000
 
   return { userToken, hashedToken, tokenExpiry }
 }

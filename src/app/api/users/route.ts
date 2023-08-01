@@ -7,6 +7,8 @@ import {
   validatePassword,
 } from "@/helpers/validators"
 import { sendEmail } from "@/utils/mail"
+import {v4 as uuidv4} from "uuid"
+import crypto from "crypto"
 
 Connect()
 
@@ -53,16 +55,20 @@ export async function POST(request: NextRequest) {
       password,
       mobile,
     })
+  
     const { userToken, hashedToken, tokenExpiry } = user?.generateTempTokens()
     console.log(hashedToken, userToken)
+    const verification_id = uuidv4()
+    const hashedVerificationToken = crypto.createHash("sha-256").update(verification_id).digest("hex")
     user.emailVerificationToken = hashedToken
     user.emailVerificationExpiry = tokenExpiry
-
+    user.verificationId= hashedVerificationToken
+    
     await user.save({ validateBeforeSave: false })
     await sendEmail(
       email,
       "Please verify your email address",
-      `<h1>Verify your email</h1> <p>Click <a href=${process.env.DOMAIN}/verifyemail?token=${userToken}>here</a> to verify your email</p>`
+      `<h1>Verify your email</h1> <p>Click <a href=${process.env.DOMAIN}/verifyemail?token=${userToken}&_verificationID=${verification_id}>here</a> to verify your email</p>`
     )
     return NextResponse.json({
       message: "User created successfully",
